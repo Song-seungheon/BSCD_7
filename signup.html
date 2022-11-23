@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <link rel="stylesheet" href="signup.css" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <div id="page">
+    <div><a href="login.html">LoginPage</a></div>
+    <div><a href="signup.html">SignUpPage</a></div>
+  </div>
+  <div id="SignUp">
+    <h2>회원가입</h2>
+    <script>
+      axios({
+        method: "get", // 통신 방식
+        url: "https://api.thecatapi.com/v1/images/search?size=full", // 서버
+      })
+        .then(function (response) {
+          var cat=response.data[0];
+          var img=document.getElementById("img");
+          img.src=cat.url;
+        })
+        .catch(error => {
+          console.log("Error")
+        });
+    </script>
+    <div id="img_wrap">
+      <img id="img" src="" alt="고양이 사진">
+    </div>
+    <form>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">ID</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" onblur="Email_Check()"
+          aria-describedby="emailHelp">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPasswordCheck" class="form-label">Password Check</label>
+        <input type="password" class="form-control" id="exampleInputPassword1Check" oninput="Password_Check()">
+        <span id = exampleInputPassword1wrong></span>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputStudentNumber" class="form-label">Student Number</label>
+        <input type="StudentNumber" maxlength="10" class="form-control" id="exampleInputStudentNumber">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputMajor" class="form-label">Major</label>
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Select your major</option>
+          <option value="1" class="exampleStudentMajor">컴퓨터공학부</option>
+          <option value="2" class="exampleStudentMajor">기계공학부</option>
+          <option value="3" class="exampleStudentMajor">전자정보통신공학부</option>
+          <option value="4" class="exampleStudentMajor">에너지신소재화학공학부</option>
+          <option value="5" class="exampleStudentMajor">산업경영학부</option>
+          <option value="6" class="exampleStudentMajor">디지털건축공학부</option>
+          <option value="7" class="exampleStudentMajor">메카트로닉스공학부</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPhoneNumber" class="form-label">Phone Number</label>
+        <input type="PhoneNumber" maxlength="11" class="form-control" id="exampleInputPhoneNumber">
+      </div>
+      <div id="button">
+        <button onclick="alert('회원가입이 완료되었습니다');" class="btn btn-primary">SignUp</button>
+        <button type="submit" class="btn btn-primary" id="login">
+          <a id="cancel" href="login.html">Cancel</a>
+        </button>
+      </div>
+  </div>
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
+    </script>
+  <script>
+    //아이디 이메일형식확인
+    function Email_Check() {
+      let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+      let email = document.getElementById("exampleInputEmail1").value;
+      if (regex.test(email) == false && email.length > 0) alert("이메일 구조로 입력해주세요!");
+    }
+
+    //비밀번호확인
+    function Password_Check() {
+      let pw = document.getElementById("exampleInputPassword1").value;
+      let pwcheck = document.getElementById("exampleInputPassword1Check").value;
+      let wrongpw = document.getElementById("exampleInputPassword1wrong");
+      if (pw != pwcheck) wrongpw.textContent = "Wrong Password!";
+      else wrongpw.textContent = "";
+    }
+
+    //학번
+    let studentnumber = document.getElementById("exampleInputStudentNumber");
+    studentnumber.addEventListener("change", function (event) {
+      if (studentnumber.value.length == 10) {
+        // let number = studentnumber.value[4] + studentnumber.value[5] + studentnumber.value[6];
+        if (studentnumber.value.slice(4, 7) == "136") {
+          document.getElementsByClassName("exampleStudentMajor")[0].selected = true;
+        }
+      }
+    });
+    studentnumber.addEventListener("input", function (event) {
+      if (studentnumber.value.length > studentnumber.maxlength) {
+        studentnumber.value = studentnumber.value.slice(0, studentnumber.maxlength);
+      }
+    });
+
+    //휴대전화번호
+    let phonenumber = document.getElementById("exampleInputPhoneNumber");
+    phonenumber.addEventListener("blur", function (event) {
+      if (phonenumber.value.length == 11)
+      phonenumber.value = phonenumber.value.slice(0, 3) + "-" + phonenumber.value.slice(3, 7) + "-" + phonenumber.value.slice(7, 11);
+    });
+    phonenumber.addEventListener("input", function (event) {
+      if (phonenumber.value.length > phonenumber.maxlength) {
+        phonenumber.value = phonenumber.value.slice(0, phonenumber.maxlength);
+      }
+    });
+  </script>
+</body>
+
+</html>
